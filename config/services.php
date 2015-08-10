@@ -30,7 +30,7 @@ return [
     ],
 
     'stripe' => [
-        'model'  => App\User::class,
+        'model'  => Imojie\User::class,
         'key'    => '',
         'secret' => '',
     ],

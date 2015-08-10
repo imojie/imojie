@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events;
+namespace Imojie\Events;
 
 abstract class Event
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace Imojie\Providers;
 
 use Illuminate\Support\ServiceProvider;
 

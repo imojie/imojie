@@ -140,9 +140,9 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
+        Imojie\Providers\AppServiceProvider::class,
+        Imojie\Providers\EventServiceProvider::class,
+        Imojie\Providers\RouteServiceProvider::class,
 
     ],
 

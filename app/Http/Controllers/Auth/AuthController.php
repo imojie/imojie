@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace Imojie\Http\Controllers\Auth;
 
-use App\User;
+use Imojie\User;
 use Validator;
-use App\Http\Controllers\Controller;
+use Imojie\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 

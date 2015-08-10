@@ -1,5 +1,5 @@
 suites:
     main:
-        namespace: App
-        psr4_prefix: App
+        namespace: Imojie
+        psr4_prefix: Imojie
         src_path: app
