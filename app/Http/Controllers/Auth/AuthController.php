@@ -7,6 +7,7 @@ use Validator;
 use Imojie\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -63,5 +64,15 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+
+    protected function throwValidationException(Request $request, $validator)
+    {
+//        var_dump($request->all(), $validator->errors()->all());
+//        return view('welcome');
+
+//        return redirect()->intended()
+////            ->withInput($request->all())
+//            ->withErrors($validator->errors()->all());
     }
 }
