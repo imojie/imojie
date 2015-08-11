@@ -1,3 +1,6 @@
+<?php
+var_dump($errors->all());
+?>
 <form method="POST" action="{{action('Auth\AuthController@postLogin')}}">
     {!! csrf_field() !!}
 
