@@ -16,12 +16,15 @@ class EventServiceProvider extends ServiceProvider
         'Imojie\Events\SomeEvent' => [
             'Imojie\Listeners\EventListener',
         ],
+        'SocialiteProviders\Manager\SocialiteWasCalled' => [
+            // add your listeners (aka providers) here
+        ],
     ];
 
     /**
      * Register any other events for your application.
      *
-     * @param  \Illuminate\Contracts\Events\Dispatcher  $events
+     * @param  \Illuminate\Contracts\Events\Dispatcher $events
      * @return void
      */
     public function boot(DispatcherContract $events)

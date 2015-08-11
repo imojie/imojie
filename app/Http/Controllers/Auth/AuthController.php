@@ -65,4 +65,10 @@ class AuthController extends Controller
         ]);
     }
 
+    public function weibo()
+    {
+        // http://socialiteproviders.github.io/providers/weibo/
+        return \Socialite::with('weibo')->redirect();
+    }
+
 }

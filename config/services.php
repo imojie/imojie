@@ -24,15 +24,20 @@ return [
     ],
 
     'ses' => [
-        'key'    => '',
+        'key' => '',
         'secret' => '',
         'region' => 'us-east-1',
     ],
 
     'stripe' => [
-        'model'  => Imojie\User::class,
-        'key'    => '',
+        'model' => Imojie\User::class,
+        'key' => '',
         'secret' => '',
+    ],
+    'weibo' => [
+        'client_id' => env('WEIBO_KEY'),
+        'client_secret' => env('WEIBO_SECRET'),
+        'redirect' => env('WEIBO_REDIRECT_URI'),
     ],
 
 ];
