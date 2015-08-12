@@ -18,9 +18,13 @@ Route::get('auth/logout', 'Auth\AuthController@getLogout');
 
 // 第三方登录
 Route::get('auth/github', 'Auth\AuthController@github');
-Route::get('auth/github/callback', 'Auth\AuthController@handleProviderCallback');
 Route::get('auth/weibo', 'Auth\AuthController@weibo');
+Route::get('auth/weibo/callback', 'Auth\AuthController@weiboCallback');
 Route::get('auth/qq', 'Auth\AuthController@qq');
+
+// 第三方登录账号绑定
+Route::get('auth/bind', 'Auth\AuthController@getBind');
+Route::post('auth/bind', 'Auth\AuthController@postBind');
 
 // 注册
 Route::get('auth/register', 'Auth\AuthController@getRegister');

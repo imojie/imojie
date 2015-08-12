@@ -2,6 +2,7 @@
 
 namespace Imojie\Http\Controllers\Auth;
 
+use Illuminate\Support\Facades\Session;
 use Imojie\User;
 use Validator;
 use Imojie\Http\Controllers\Controller;
@@ -24,6 +25,8 @@ class AuthController extends Controller
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 
     protected $redirectPath = '/';
+
+    const OAUTH_USER = 'oauth_user';
 
     /**
      * Create a new authentication controller instance.
@@ -85,11 +88,52 @@ class AuthController extends Controller
     }
 
 
-    public function handleProviderCallback()
+    public function getBind()
     {
-        $user = \Socialite::with('github')->user();
-
-        // $user->token;
+        if (!Session::has(self::OAUTH_USER)) {
+            return redirect($this->loginPath());
+        }
+        return view('auth.bind');
     }
+
+
+    public function postBind(Request $request)
+    {
+        if (!Session::has(self::OAUTH_USER)) {
+            return redirect($this->loginPath());
+        }
+
+        $data = array_merge(Session::get(self::OAUTH_USER), $request->all());
+
+        $validator = $this->validator($data);
+
+        if ($validator->fails()) {
+            $this->throwValidationException(
+                $data, $validator
+            );
+        }
+
+        Auth::login($this->create($data));
+
+        return redirect($this->redirectPath());
+    }
+
+
+    public function weiboCallback()
+    {
+        $oauthUser = \Socialite::with('weibo')->user();
+
+        // 已经绑定了账号，直接登录
+        $localUser = User::where('weibo', $oauthUser->getUid)->first();
+        if ($localUser) {
+            \Auth::login($localUser);
+            return redirect($this->redirectPath());
+        }
+
+        // 跳转到绑定账号的页面
+        Session::put(self::OAUTH_USER, $oauthUser);
+        return redirect(action('Auth\AuthController@bind'));
+    }
+
 
 }
