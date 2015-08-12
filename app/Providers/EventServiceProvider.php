@@ -17,7 +17,8 @@ class EventServiceProvider extends ServiceProvider
             'Imojie\Listeners\EventListener',
         ],
         'SocialiteProviders\Manager\SocialiteWasCalled' => [
-            // add your listeners (aka providers) here
+            'SocialiteProviders\Weibo\WeiboExtendSocialite@handle',
+            'SocialiteProviders\Qq\QqExtendSocialite@handle',
         ],
     ];
 

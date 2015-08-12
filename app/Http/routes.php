@@ -17,7 +17,10 @@ Route::post('auth/login', 'Auth\AuthController@postLogin');
 Route::get('auth/logout', 'Auth\AuthController@getLogout');
 
 // 第三方登录
+Route::get('auth/github', 'Auth\AuthController@github');
+Route::get('auth/github/callback', 'Auth\AuthController@handleProviderCallback');
 Route::get('auth/weibo', 'Auth\AuthController@weibo');
+Route::get('auth/qq', 'Auth\AuthController@qq');
 
 // 注册
 Route::get('auth/register', 'Auth\AuthController@getRegister');

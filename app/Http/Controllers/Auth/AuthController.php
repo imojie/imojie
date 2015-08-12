@@ -65,10 +65,31 @@ class AuthController extends Controller
         ]);
     }
 
+
     public function weibo()
     {
         // http://socialiteproviders.github.io/providers/weibo/
         return \Socialite::with('weibo')->redirect();
+    }
+
+    public function qq()
+    {
+        // http://socialiteproviders.github.io/providers/qq/
+        return \Socialite::with('qq')->redirect();
+    }
+
+
+    public function github()
+    {
+        return \Socialite::with('github')->redirect();
+    }
+
+
+    public function handleProviderCallback()
+    {
+        $user = \Socialite::with('github')->user();
+
+        // $user->token;
     }
 
 }
