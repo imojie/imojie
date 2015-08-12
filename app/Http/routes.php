@@ -6,10 +6,8 @@ Route::get('/', function () {
 });
 
 // 用户主页
-Route::get('/home', array('middleware' => 'auth', function () {
-    $user = Auth::user();
-    return $user->email;
-}));
+Route::get('/home', 'UserController@home');
+Route::get('/user/{username}', 'UserController@index');
 
 // 登录
 Route::get('auth/login', 'Auth\AuthController@getLogin');

@@ -93,6 +93,16 @@ class AuthController extends Controller
         if (!Session::has(self::OAUTH_USER)) {
             return redirect($this->loginPath());
         }
+        $oauthUser = Session::get(self::OAUTH_USER);
+
+        // 已经绑定了账号，直接登录
+        $localUser = User::where('weibo', $oauthUser->getUid)->first();
+        if ($localUser) {
+            \Auth::login($localUser);
+            return redirect($this->redirectPath());
+        }
+
+
         return view('auth.bind');
     }
 
@@ -101,6 +111,14 @@ class AuthController extends Controller
     {
         if (!Session::has(self::OAUTH_USER)) {
             return redirect($this->loginPath());
+        }
+        $oauthUser = Session::get(self::OAUTH_USER);
+
+        // 已经绑定了账号，直接登录
+        $localUser = User::where('weibo', $oauthUser->getUid)->first();
+        if ($localUser) {
+            \Auth::login($localUser);
+            return redirect($this->redirectPath());
         }
 
         $data = array_merge(Session::get(self::OAUTH_USER), $request->all());

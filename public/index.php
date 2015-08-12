@@ -55,4 +55,6 @@ $response = $kernel->handle(
 
 $response->send();
 
+\DB::connection()->enableQueryLog();
+
 $kernel->terminate($request, $response);
