@@ -7,7 +7,7 @@ Route::get('/', function () {
 
 // 用户主页
 Route::get('/home', 'UserController@home');
-Route::get('/user/{username}', 'UserController@index');
+Route::get('/u/{username}', 'UserController@index');
 
 // 登录
 Route::get('auth/login', 'Auth\AuthController@getLogin');
@@ -17,7 +17,7 @@ Route::get('auth/logout', 'Auth\AuthController@getLogout');
 // 第三方登录
 Route::get('auth/github', 'Auth\AuthController@github');
 Route::get('auth/weibo', 'Auth\AuthController@weibo');
-Route::get('auth/weibo/callback', 'Auth\AuthController@weiboCallback');
+Route::get('auth/weibo/callback', 'Auth\AuthController@callback');
 Route::get('auth/qq', 'Auth\AuthController@qq');
 
 // 第三方登录账号绑定
@@ -35,3 +35,7 @@ Route::post('password/email', 'Auth\PasswordController@postEmail');
 // 重置密码
 Route::get('password/reset/{token}', 'Auth\PasswordController@getReset');
 Route::post('password/reset', 'Auth\PasswordController@postReset');
+
+
+Route::get('user/edit', 'UserController@edit');
+Route::post('user/update', 'UserController@update');

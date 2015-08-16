@@ -11,16 +11,6 @@ use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 
 class AuthController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Registration & Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users, as well as the
-    | authentication of existing users. By default, this controller uses
-    | a simple trait to add these behaviors. Why don't you explore it?
-    |
-    */
 
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 
@@ -72,7 +62,7 @@ class AuthController extends Controller
     public function weibo()
     {
         // http://socialiteproviders.github.io/providers/weibo/
-        return \Socialite::with('weibo')->redirect();
+        return \Socialite::with('weibo')->scopes(array('all', 'email'))->redirect();
     }
 
     public function qq()
@@ -102,7 +92,6 @@ class AuthController extends Controller
             return redirect($this->redirectPath());
         }
 
-
         return view('auth.bind');
     }
 
@@ -131,25 +120,25 @@ class AuthController extends Controller
             );
         }
 
-        Auth::login($this->create($data));
+        \Auth::login($this->create($data));
 
         return redirect($this->redirectPath());
     }
 
 
-    public function weiboCallback()
+    public function callback()
     {
         $oauthUser = \Socialite::with('weibo')->user();
 
         // 已经绑定了账号，直接登录
-        $localUser = User::where('weibo', $oauthUser->getUid)->first();
+        $localUser = User::where('weibo', $oauthUser->getId())->first();
         if ($localUser) {
             \Auth::login($localUser);
             return redirect($this->redirectPath());
         }
 
         // 跳转到绑定账号的页面
-        Session::put(self::OAUTH_USER, $oauthUser);
+        \Session::put(self::OAUTH_USER, $oauthUser);
         return redirect(action('Auth\AuthController@bind'));
     }
 
