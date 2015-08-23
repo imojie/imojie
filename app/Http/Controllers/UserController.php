@@ -3,6 +3,7 @@
 namespace Imojie\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Imojie\User;
 
 class UserController extends Controller
@@ -13,7 +14,7 @@ class UserController extends Controller
     {
         \DB::connection()->enableQueryLog();
 
-        $this->middleware('auth', ['except' => 'index']);
+        $this->middleware('auth', ['except' => ['index', 'home']]);
     }
 
 
@@ -27,7 +28,7 @@ class UserController extends Controller
 
     public function home()
     {
-        $user = \Auth::user();
+        $user = Sentinel::getUser();
         return $user->email;
     }
 

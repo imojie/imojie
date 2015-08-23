@@ -5,6 +5,7 @@ namespace Imojie\Http\Controllers\Auth;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Laravel\Socialite\Facades\Socialite;
 use Imojie\Http\Controllers\Controller;
 use Imojie\Models\Auth\ThrottlesLogins;
@@ -54,11 +55,11 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        return Sentinel::register([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
-        ]);
+        ], true);
     }
 
 
