@@ -48,7 +48,7 @@ trait AuthenticatesUsers
 
         $credentials = $this->getCredentials($request);
 
-        if (Auth::attempt($credentials, $request->has('remember'))) {
+        if (Sentinel::authenticate($credentials, boolval($request->has('remember')))) {
             return $this->handleUserWasAuthenticated($request, $throttles);
         }
 

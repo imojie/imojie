@@ -1049,16 +1049,16 @@
         },
         {
             "name": "league/oauth1-client",
-            "version": "1.5.0",
+            "version": "1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/oauth1-client.git",
-                "reference": "815b2dbd2b866409f3de6e4046a76e66b5af608e"
+                "reference": "4d4edd9b6014f882e319231a9b3351e3a1dfdc81"
             },
             "dist": {
                 "type": "zip",
-                "url": "http://packagist.phpcomposer.com/files/thephpleague/oauth1-client/815b2dbd2b866409f3de6e4046a76e66b5af608e.zip",
-                "reference": "815b2dbd2b866409f3de6e4046a76e66b5af608e",
+                "url": "http://packagist.phpcomposer.com/files/thephpleague/oauth1-client/4d4edd9b6014f882e319231a9b3351e3a1dfdc81.zip",
+                "reference": "4d4edd9b6014f882e319231a9b3351e3a1dfdc81",
                 "shasum": ""
             },
             "require": {
@@ -1066,9 +1066,9 @@
                 "php": ">=5.3.0"
             },
             "require-dev": {
-                "mockery/mockery": "0.7.2",
-                "phpunit/phpunit": "*",
-                "satooshi/php-coveralls": "dev-master"
+                "mockery/mockery": "~0.9",
+                "phpunit/phpunit": "~4.0",
+                "squizlabs/php_codesniffer": "~2.0"
             },
             "type": "library",
             "extra": {
@@ -1108,7 +1108,7 @@
                 "tumblr",
                 "twitter"
             ],
-            "time": "2015-05-18 00:04:43"
+            "time": "2015-08-22 09:49:14"
         },
         {
             "name": "monolog/monolog",
@@ -3223,16 +3223,16 @@
         },
         {
             "name": "phpunit/php-token-stream",
-            "version": "1.4.5",
+            "version": "1.4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-token-stream.git",
-                "reference": "09fc125d65c344c53a7c7ad8f261e3f3af9f76c5"
+                "reference": "3ab72c62e550370a6cd5dc873e1a04ab57562f5b"
             },
             "dist": {
                 "type": "zip",
-                "url": "http://packagist.phpcomposer.com/files/sebastianbergmann/php-token-stream/09fc125d65c344c53a7c7ad8f261e3f3af9f76c5.zip",
-                "reference": "09fc125d65c344c53a7c7ad8f261e3f3af9f76c5",
+                "url": "http://packagist.phpcomposer.com/files/sebastianbergmann/php-token-stream/3ab72c62e550370a6cd5dc873e1a04ab57562f5b.zip",
+                "reference": "3ab72c62e550370a6cd5dc873e1a04ab57562f5b",
                 "shasum": ""
             },
             "require": {
@@ -3268,20 +3268,20 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2015-08-13 14:23:08"
+            "time": "2015-08-16 08:51:00"
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.8.4",
+            "version": "4.8.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "55bf1d6092b0e13a1f26bd5eaffeef3d8ad85ea7"
+                "reference": "9b7417edaf28059ea63d86be941e6004dbfcc0cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "http://packagist.phpcomposer.com/files/sebastianbergmann/phpunit/55bf1d6092b0e13a1f26bd5eaffeef3d8ad85ea7.zip",
-                "reference": "55bf1d6092b0e13a1f26bd5eaffeef3d8ad85ea7",
+                "url": "http://packagist.phpcomposer.com/files/sebastianbergmann/phpunit/9b7417edaf28059ea63d86be941e6004dbfcc0cc.zip",
+                "reference": "9b7417edaf28059ea63d86be941e6004dbfcc0cc",
                 "shasum": ""
             },
             "require": {
@@ -3340,24 +3340,24 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-08-15 04:21:23"
+            "time": "2015-08-19 09:20:57"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
-            "version": "2.3.6",
+            "version": "2.3.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "18dfbcb81d05e2296c0bcddd4db96cade75e6f42"
+                "reference": "5e2645ad49d196e020b85598d7c97e482725786a"
             },
             "dist": {
                 "type": "zip",
-                "url": "http://packagist.phpcomposer.com/files/sebastianbergmann/phpunit-mock-objects/18dfbcb81d05e2296c0bcddd4db96cade75e6f42.zip",
-                "reference": "18dfbcb81d05e2296c0bcddd4db96cade75e6f42",
+                "url": "http://packagist.phpcomposer.com/files/sebastianbergmann/phpunit-mock-objects/5e2645ad49d196e020b85598d7c97e482725786a.zip",
+                "reference": "5e2645ad49d196e020b85598d7c97e482725786a",
                 "shasum": ""
             },
             "require": {
-                "doctrine/instantiator": "~1.0,>=1.0.2",
+                "doctrine/instantiator": "^1.0.2",
                 "php": ">=5.3.3",
                 "phpunit/php-text-template": "~1.2",
                 "sebastian/exporter": "~1.2"
@@ -3396,7 +3396,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2015-07-10 06:54:24"
+            "time": "2015-08-19 09:14:08"
         },
         {
             "name": "sebastian/comparator",
