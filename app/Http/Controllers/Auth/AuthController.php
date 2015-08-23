@@ -2,19 +2,22 @@
 
 namespace Imojie\Http\Controllers\Auth;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use Imojie\User;
-use Validator;
+use Illuminate\Support\Facades\Validator;
+use Laravel\Socialite\Facades\Socialite;
 use Imojie\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\ThrottlesLogins;
-use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Imojie\Models\Auth\ThrottlesLogins;
+use Imojie\Models\Auth\AuthenticatesAndRegistersUsers;
+use Imojie\User;
+
 
 class AuthController extends Controller
 {
 
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 
-    protected $redirectPath = '/';
+    protected $redirectPath = '/home';
 
     const OAUTH_USER = 'oauth_user';
 
@@ -62,19 +65,19 @@ class AuthController extends Controller
     public function weibo()
     {
         // http://socialiteproviders.github.io/providers/weibo/
-        return \Socialite::with('weibo')->scopes(array('all', 'email'))->redirect();
+        return Socialite::with('weibo')->scopes(array('all', 'email'))->redirect();
     }
 
     public function qq()
     {
         // http://socialiteproviders.github.io/providers/qq/
-        return \Socialite::with('qq')->redirect();
+        return Socialite::with('qq')->redirect();
     }
 
 
     public function github()
     {
-        return \Socialite::with('github')->redirect();
+        return Socialite::with('github')->redirect();
     }
 
 
@@ -88,7 +91,7 @@ class AuthController extends Controller
         // 已经绑定了账号，直接登录
         $localUser = User::where('weibo', $oauthUser->getUid)->first();
         if ($localUser) {
-            \Auth::login($localUser);
+            Auth::login($localUser);
             return redirect($this->redirectPath());
         }
 
@@ -106,7 +109,7 @@ class AuthController extends Controller
         // 已经绑定了账号，直接登录
         $localUser = User::where('weibo', $oauthUser->getUid)->first();
         if ($localUser) {
-            \Auth::login($localUser);
+            Auth::login($localUser);
             return redirect($this->redirectPath());
         }
 
@@ -120,7 +123,7 @@ class AuthController extends Controller
             );
         }
 
-        \Auth::login($this->create($data));
+        Auth::login($this->create($data));
 
         return redirect($this->redirectPath());
     }
@@ -128,17 +131,17 @@ class AuthController extends Controller
 
     public function callback()
     {
-        $oauthUser = \Socialite::with('weibo')->user();
+        $oauthUser = Socialite::with('weibo')->user();
 
         // 已经绑定了账号，直接登录
         $localUser = User::where('weibo', $oauthUser->getId())->first();
         if ($localUser) {
-            \Auth::login($localUser);
+            Auth::login($localUser);
             return redirect($this->redirectPath());
         }
 
         // 跳转到绑定账号的页面
-        \Session::put(self::OAUTH_USER, $oauthUser);
+        Session::put(self::OAUTH_USER, $oauthUser);
         return redirect(action('Auth\AuthController@bind'));
     }
 
