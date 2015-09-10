@@ -11,6 +11,7 @@ use Imojie\Http\Controllers\Controller;
 use Imojie\Models\Auth\ThrottlesLogins;
 use Imojie\Models\Auth\AuthenticatesAndRegistersUsers;
 use Imojie\User;
+use Imojie\Models\OAuthAccount;
 
 
 class AuthController extends Controller
@@ -82,22 +83,20 @@ class AuthController extends Controller
     public function callback($provider)
     {
         $provider = strtolower($provider);
-        var_dump($provider);
 
         $oauthUser = Socialite::with($provider)->user();
-        var_dump($oauthUser, $oauthUser->getId(), $oauthUser->getNickname(), $oauthUser->getAvatar());
-        exit;
 
-        // 已经绑定了账号，直接登录
-        $localUser = User::where('weibo', $oauthUser->getId())->first();
-        if ($localUser) {
-            Auth::login($localUser);
+        $uid = OAuthAccount::where('oauth_id', $oauthUser->getId())
+            ->where('oauth_type', $provider)->pluck('uid');
+
+        if ($uid && $user = Sentinel::findById($uid)) {
+            Sentinel::login($user);
             return redirect($this->redirectPath());
         }
 
-        // 跳转到绑定账号的页面
+        // 如果当前第三方账号没有绑定我站账号，那么跳转到绑定账号的页面
         Session::put(self::OAUTH_USER, $oauthUser);
-        return redirect(action('Auth\AuthController@bind'));
+        return redirect()->action('Auth\AuthController@getBind');
     }
 
 
@@ -109,9 +108,10 @@ class AuthController extends Controller
         $oauthUser = Session::get(self::OAUTH_USER);
 
         // 已经绑定了账号，直接登录
-        $localUser = User::where('weibo', $oauthUser->getUid)->first();
-        if ($localUser) {
-            Auth::login($localUser);
+        $uid = OAuthAccount::where('oauth_id', $oauthUser->getId())
+            ->where('oauth_type', $provider)->pluck('uid');
+        if ($uid && $user = Sentinel::findById($uid)) {
+            Sentinel::login($user);
             return redirect($this->redirectPath());
         }
 
