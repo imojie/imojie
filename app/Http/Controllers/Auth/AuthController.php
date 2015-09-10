@@ -63,22 +63,41 @@ class AuthController extends Controller
     }
 
 
-    public function weibo()
+    public function oauth($provider)
     {
-        // http://socialiteproviders.github.io/providers/weibo/
-        return Socialite::with('weibo')->scopes(array('all', 'email'))->redirect();
+        $provider = strtolower($provider);
+        switch ($provider) {
+            case 'qq':
+                return Socialite::with('qq')->redirect();
+                break;
+            case 'weibo':
+                return Socialite::with('weibo')->scopes(array('all'))->redirect();
+                break;
+            default:
+                return redirect('auth/login');
+        }
     }
 
-    public function qq()
-    {
-        // http://socialiteproviders.github.io/providers/qq/
-        return Socialite::with('qq')->redirect();
-    }
 
-
-    public function github()
+    public function callback($provider)
     {
-        return Socialite::with('github')->redirect();
+        $provider = strtolower($provider);
+        var_dump($provider);
+
+        $oauthUser = Socialite::with($provider)->user();
+        var_dump($oauthUser, $oauthUser->getId(), $oauthUser->getNickname(), $oauthUser->getAvatar());
+        exit;
+
+        // 已经绑定了账号，直接登录
+        $localUser = User::where('weibo', $oauthUser->getId())->first();
+        if ($localUser) {
+            Auth::login($localUser);
+            return redirect($this->redirectPath());
+        }
+
+        // 跳转到绑定账号的页面
+        Session::put(self::OAUTH_USER, $oauthUser);
+        return redirect(action('Auth\AuthController@bind'));
     }
 
 
@@ -127,23 +146,6 @@ class AuthController extends Controller
         Auth::login($this->create($data));
 
         return redirect($this->redirectPath());
-    }
-
-
-    public function callback()
-    {
-        $oauthUser = Socialite::with('weibo')->user();
-
-        // 已经绑定了账号，直接登录
-        $localUser = User::where('weibo', $oauthUser->getId())->first();
-        if ($localUser) {
-            Auth::login($localUser);
-            return redirect($this->redirectPath());
-        }
-
-        // 跳转到绑定账号的页面
-        Session::put(self::OAUTH_USER, $oauthUser);
-        return redirect(action('Auth\AuthController@bind'));
     }
 
 

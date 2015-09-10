@@ -20,6 +20,15 @@ Route::get('auth/weibo', 'Auth\AuthController@weibo');
 Route::get('auth/weibo/callback', 'Auth\AuthController@callback');
 Route::get('auth/qq', 'Auth\AuthController@qq');
 
+Route::get('oauth/{provider}', array(
+    'as' => 'oauth', 'uses' => 'Auth\AuthController@oauth'
+));
+//->where('provider', 'qq|weibo');
+Route::get('oauth/{provider}/callback', array(
+    'uses' => 'Auth\AuthController@callback'
+));
+//->where('provider', 'qq|weibo');
+
 // 第三方登录账号绑定
 Route::get('auth/bind', 'Auth\AuthController@getBind');
 Route::post('auth/bind', 'Auth\AuthController@postBind');

@@ -1,24 +1,13 @@
-<?php
-var_dump($errors->all());
-?>
-<form method="POST" action="{{action('Auth\AuthController@postLogin')}}">
-    {!! csrf_field() !!}
+@extends('layout.default')
 
-    <div>
-        Email
-        <input type="email" name="email" value="{{ old('email') }}">
-    </div>
+@section('title')登录
+@stop
 
-    <div>
-        Password
-        <input type="password" name="password" id="password">
+@section('content')
+    <div id="login-page" class="container">
+        <div id="login_btns">
+            <a class="btn btn-danger" href="{{route('oauth', ['provider' => 'weibo'])}}">微博登录</a>
+            <a class="btn btn-primary" href="{{route('oauth', ['provider' => 'qq'])}}">QQ 登录</a>
+        </div>
     </div>
-
-    <div>
-        <input type="checkbox" name="remember"> Remember Me
-    </div>
-
-    <div>
-        <button type="submit">Login</button>
-    </div>
-</form>
+@stop
