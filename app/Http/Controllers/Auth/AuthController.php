@@ -96,11 +96,11 @@ class AuthController extends Controller
 
         // 如果当前第三方账号没有绑定我站账号，那么跳转到绑定账号的页面
         Session::put(self::OAUTH_USER, $oauthUser);
-        return redirect()->action('Auth\AuthController@getBind');
+        return redirect()->action('Auth\AuthController@getBind', ['provider' => $provider]);
     }
 
 
-    public function getBind()
+    public function getBind($provider)
     {
         if (!Session::has(self::OAUTH_USER)) {
             return redirect($this->loginPath());

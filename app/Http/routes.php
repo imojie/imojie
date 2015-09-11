@@ -30,7 +30,7 @@ Route::get('oauth/{provider}/callback', array(
 //->where('provider', 'qq|weibo');
 
 // 第三方登录账号绑定
-Route::get('auth/bind', 'Auth\AuthController@getBind');
+Route::get('auth/bind/{provider}', 'Auth\AuthController@getBind');
 Route::post('auth/bind', 'Auth\AuthController@postBind');
 
 // 注册
