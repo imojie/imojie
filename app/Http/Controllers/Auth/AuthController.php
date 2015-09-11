@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Laravel\Socialite\Facades\Socialite;
 use Imojie\Http\Controllers\Controller;
+use Imojie\Http\Requests\BindAccountRequest;
 use Imojie\Models\Auth\ThrottlesLogins;
 use Imojie\Models\Auth\AuthenticatesAndRegistersUsers;
 use Imojie\User;
@@ -95,17 +96,22 @@ class AuthController extends Controller
         }
 
         // 如果当前第三方账号没有绑定我站账号，那么跳转到绑定账号的页面
-        Session::put(self::OAUTH_USER, $oauthUser);
-        return redirect()->action('Auth\AuthController@getBind', ['provider' => $provider]);
+        Session::put(self::OAUTH_USER, array(
+            'provider' => $provider,
+            'user' => $oauthUser,
+        ));
+        return redirect()->action('Auth\AuthController@getBind');
     }
 
 
-    public function getBind($provider)
+    public function getBind()
     {
         if (!Session::has(self::OAUTH_USER)) {
             return redirect($this->loginPath());
         }
-        $oauthUser = Session::get(self::OAUTH_USER);
+        $oauthInfo = Session::get(self::OAUTH_USER);
+        $provider = $oauthInfo['provider'];
+        $oauthUser = $oauthInfo['user'];
 
         // 已经绑定了账号，直接登录
         $uid = OAuthAccount::where('oauth_id', $oauthUser->getId())
@@ -119,31 +125,43 @@ class AuthController extends Controller
     }
 
 
-    public function postBind(Request $request)
+    public function postBind(BindAccountRequest $request)
     {
         if (!Session::has(self::OAUTH_USER)) {
             return redirect($this->loginPath());
         }
-        $oauthUser = Session::get(self::OAUTH_USER);
+        $oauthInfo = Session::get(self::OAUTH_USER);
+        $provider = $oauthInfo['provider'];
+        $oauthUser = $oauthInfo['user'];
 
         // 已经绑定了账号，直接登录
-        $localUser = User::where('weibo', $oauthUser->getUid)->first();
-        if ($localUser) {
-            Auth::login($localUser);
+        $uid = OAuthAccount::where('oauth_id', $oauthUser->getId())
+            ->where('oauth_type', $provider)->pluck('uid');
+        if ($uid && $user = Sentinel::findById($uid)) {
+            Sentinel::login($user);
             return redirect($this->redirectPath());
         }
 
-        $data = array_merge(Session::get(self::OAUTH_USER), $request->all());
+        // 验证账号
+        $credentials = [
+            'email' => $request->input('email'),
+            'password' => $request->input('password'),
+        ];
 
-        $validator = $this->validator($data);
-
-        if ($validator->fails()) {
-            $this->throwValidationException(
-                $data, $validator
-            );
+        $user = Sentinel::authenticate($credentials, false);
+        if (!$user) {
+            return redirect()->back()->withErrors(array('账号或密码错误'));
         }
 
-        Auth::login($this->create($data));
+        // 绑定账号
+        $oAuthAccount = new OAuthAccount();
+        $oAuthAccount->uid = $user->id;
+        $oAuthAccount->oauth_id = $oauthUser->getId();
+        $oAuthAccount->oauth_type = $provider;
+        $oAuthAccount->created_at = time();
+        $oAuthAccount->save();
+
+        Session::forget(self::OAUTH_USER);
 
         return redirect($this->redirectPath());
     }
