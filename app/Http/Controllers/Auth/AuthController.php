@@ -8,10 +8,11 @@ use Illuminate\Support\Facades\Validator;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Laravel\Socialite\Facades\Socialite;
 use Imojie\Http\Controllers\Controller;
+use Imojie\Http\Requests\LoginRequest;
 use Imojie\Http\Requests\BindAccountRequest;
 use Imojie\Models\Auth\ThrottlesLogins;
 use Imojie\Models\Auth\AuthenticatesAndRegistersUsers;
-use Imojie\User;
+use Imojie\Models\User;
 use Imojie\Models\OAuthAccount;
 
 
@@ -62,6 +63,36 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => $data['password'],
         ], true);
+    }
+
+
+    public function getLogin()
+    {
+        return view('auth.login');
+    }
+
+
+    public function postLogin(LoginRequest $request)
+    {
+        // 验证账号
+        $credentials = [
+            'email' => $request->input('email'),
+            'password' => $request->input('password'),
+        ];
+        $remember = $request->has('remember') ? true : false;
+        $user = Sentinel::authenticate($credentials, $remember);
+        if (!$user) {
+            return redirect()->back()->withInput($request->except(array('password')))
+                ->withErrors(array('账号或密码错误'));
+        }
+        return redirect($this->redirectPath());
+    }
+
+
+    public function getLogout()
+    {
+        Sentinel::logout();
+        return redirect(property_exists($this, 'redirectAfterLogout') ? $this->redirectAfterLogout : '/');
     }
 
 
@@ -147,10 +178,10 @@ class AuthController extends Controller
             'email' => $request->input('email'),
             'password' => $request->input('password'),
         ];
-
         $user = Sentinel::authenticate($credentials, false);
         if (!$user) {
-            return redirect()->back()->withErrors(array('账号或密码错误'));
+            return redirect()->back()->withInput($request->except(array('password')))
+                ->withErrors(array('账号或密码错误'));
         }
 
         // 绑定账号

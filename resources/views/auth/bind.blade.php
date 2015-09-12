@@ -6,7 +6,7 @@
 @section('content')
     <div class="container">
         <div id="bind-wrap">
-            <ul class="nav nav-tabs" role="tablist">
+            <ul class="nav nav-tabs mb15" role="tablist">
                 <li role="presentation" class="active">
                     <a href="#bind" aria-controls="bind" role="tab" data-toggle="tab">绑定已有账号</a>
                 </li>
@@ -16,9 +16,17 @@
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="bind" role="tabpanel">
-                    <form method="POST" action="{{action('Auth\AuthController@postLogin')}}">
+                    <form method="POST" action="{{action('Auth\AuthController@postBind')}}">
+                        @foreach ($errors->all() as $error)
+                            <div class="alert alert-warning alert-dismissible" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <p>{{$error}}</p>
+                            </div>
+                        @endforeach
                         {!! csrf_field() !!}
-                        <div class="form-group mt10">
+                        <div class="form-group">
                             <label for="email">邮箱</label>
                             <input type="email" class="form-control" id="email" placeholder="Email" name="email"
                                    value="{{ old('email') }}">
@@ -32,7 +40,7 @@
                             <span>同意并接受 <a target="_blank" href="">《服务条款》</a></span>
                         </div>
                         <div class="form-group">
-                            <button type="submit" class="btn btn-success">绑定</button>
+                            <button type="submit" class="btn btn-success btn-block">绑 定</button>
                         </div>
                     </form>
                 </div>
@@ -48,7 +56,7 @@
                             <span>同意并接受 <a target="_blank" href="">《服务条款》</a></span>
                         </div>
                         <div class="form-group">
-                            <button type="submit" class="btn btn-success">注册</button>
+                            <button type="submit" class="btn btn-success btn-block">注 册</button>
                         </div>
                     </form>
                 </div>

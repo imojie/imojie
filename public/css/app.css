@@ -1,6 +1,6 @@
-#login_btns {
-    margin: 80px auto;
-    width: 170px;
+#passport-wrap {
+    margin: 30px auto 0;
+    width: 55%;
 }
 
 #bind-wrap {
@@ -11,6 +11,11 @@
     width: 50%;
 }
 
+.mb15 {
+    margin-bottom: 15px;
+}
+
 .mt10 {
     margin-top: 10px;
 }
+
