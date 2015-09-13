@@ -91,8 +91,12 @@ return [
             'email' => '邮箱格式不正确',
             'required' => '邮箱不能为空',
         ],
+        'username' => [
+            'required' => '用户名不能为空',
+        ],
         'password' => [
             'required' => '密码不能为空',
+            'confirmed' => '两次密码必须一致',
         ],
     ],
 

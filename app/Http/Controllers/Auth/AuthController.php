@@ -13,6 +13,7 @@ use Laravel\Socialite\Facades\Socialite;
 use Imojie\Http\Controllers\Controller;
 use Imojie\Http\Requests\LoginRequest;
 use Imojie\Http\Requests\BindAccountRequest;
+use Imojie\Http\Requests\RegisterRequest;
 use Imojie\Models\Auth\ThrottlesLogins;
 use Imojie\Models\Auth\AuthenticatesAndRegistersUsers;
 use Imojie\Models\User;
@@ -101,41 +102,50 @@ class AuthController extends Controller
             'code' => $activation->code,
         ];
         Mail::queue('emails.register', $vars, function ($message) use ($email) {
-            $message->to('877131516@qq.com', $email)->subject('感谢您的注册');
+            $message->to($email, $email)->subject('感谢您的注册');
         });
 
         return redirect('auth/registered');
     }
 
 
-    public function  getRegistered()
+    public function getRegistered()
     {
         return view('auth.registered');
     }
 
 
-    public function getActivation()
+    public function getActivation(Request $request)
     {
-        return view('auth.activation');
+        if (!$request->has('email') || !$request->has('code')) {
+            abort(404);
+        }
+        return view('auth.activation', [
+            'email' => $request->input('email'),
+            'code' => $request->input('code'),
+        ]);
     }
 
 
-    public function postActivation()
+    public function postActivation(RegisterRequest $request)
     {
-        $user = Sentinel::findByCredentials(array(
-            'email' => 'u9@imojie.com',
+        $email = $request->input('email');
+        $user = Sentinel::findByCredentials(['email' => $email]);
+
+        // 设置用户名和密码
+        Sentinel::update($user, array(
+            'first_name' => $request->input('username'),
+            'password' => $request->input('password'),
         ));
 
-        \DB::connection()->enableQueryLog();
-        $r = Sentinel::update($user, array(
-            'last_name' => 'xxxxxx',
-            'password' => '111111',
-        ));
-//        var_dump($r);
-        var_dump(\DB::getQueryLog());
+        // 激活用户账号
+        $status = Activation::complete($user, $request->input('code'));
+        if (!$status) {
+            return redirect('auth/register')->withErrors(array('邮件链接过期，请重新注册'));
+        }
 
-//        激活用户账号
-        $s = Activation::complete($user, '5gO3zG3FQguFqvqgAmfoiWmiK5nijZHi');
+        // 登录
+        Sentinel::login($user);
 
         return redirect($this->redirectPath());
     }
@@ -271,6 +281,5 @@ class AuthController extends Controller
 
         return redirect($this->redirectPath());
     }
-
 
 }
