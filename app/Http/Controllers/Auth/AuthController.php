@@ -3,9 +3,12 @@
 namespace Imojie\Http\Controllers\Auth;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
+use Cartalyst\Sentinel\Laravel\Facades\Activation;
 use Laravel\Socialite\Facades\Socialite;
 use Imojie\Http\Controllers\Controller;
 use Imojie\Http\Requests\LoginRequest;
@@ -32,7 +35,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest', ['except' => 'getLogout']);
+        $this->middleware('guest', ['except' => 'postLogout']);
     }
 
     /**
@@ -66,6 +69,78 @@ class AuthController extends Controller
     }
 
 
+    public function getRegister()
+    {
+        return view('auth.register');
+    }
+
+
+    public function postRegister(Request $request)
+    {
+        $this->validate($request, [
+            'email' => 'required|email|unique:users',
+        ], [
+            'email.unique' => '该邮箱已经被注册激活',
+        ]);
+
+        $email = $request->input('email');
+
+        // 注册用户，但是先不激活
+        $credentials = [
+            'email' => $email,
+            'password' => md5(time()),
+        ];
+        $user = Sentinel::register($credentials, false);
+
+        // 生成激活码
+        $activation = Activation::create($user);
+
+        // 发邮件
+        $vars = [
+            'email' => $email,
+            'code' => $activation->code,
+        ];
+        Mail::queue('emails.register', $vars, function ($message) use ($email) {
+            $message->to('877131516@qq.com', $email)->subject('感谢您的注册');
+        });
+
+        return redirect('auth/registered');
+    }
+
+
+    public function  getRegistered()
+    {
+        return view('auth.registered');
+    }
+
+
+    public function getActivation()
+    {
+        return view('auth.activation');
+    }
+
+
+    public function postActivation()
+    {
+        $user = Sentinel::findByCredentials(array(
+            'email' => 'u9@imojie.com',
+        ));
+
+        \DB::connection()->enableQueryLog();
+        $r = Sentinel::update($user, array(
+            'last_name' => 'xxxxxx',
+            'password' => '111111',
+        ));
+//        var_dump($r);
+        var_dump(\DB::getQueryLog());
+
+//        激活用户账号
+        $s = Activation::complete($user, '5gO3zG3FQguFqvqgAmfoiWmiK5nijZHi');
+
+        return redirect($this->redirectPath());
+    }
+
+
     public function getLogin()
     {
         return view('auth.login');
@@ -89,7 +164,7 @@ class AuthController extends Controller
     }
 
 
-    public function getLogout()
+    public function postLogout()
     {
         Sentinel::logout();
         return redirect(property_exists($this, 'redirectAfterLogout') ? $this->redirectAfterLogout : '/');

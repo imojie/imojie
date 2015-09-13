@@ -9,17 +9,20 @@ Route::get('/', function () {
 Route::get('/home', 'UserController@home');
 Route::get('/u/{username}', 'UserController@index');
 
+// 注册
+Route::get('auth/register', 'Auth\AuthController@getRegister');
+Route::post('auth/register', 'Auth\AuthController@postRegister');
+Route::get('auth/registered', 'Auth\AuthController@getRegistered');
+Route::get('auth/activation', 'Auth\AuthController@getActivation');
+Route::post('auth/activation', 'Auth\AuthController@postActivation');
+
+
 // 登录
 Route::get('auth/login', 'Auth\AuthController@getLogin');
 Route::post('auth/login', 'Auth\AuthController@postLogin');
-Route::get('auth/logout', 'Auth\AuthController@getLogout');
+Route::post('auth/logout', 'Auth\AuthController@postLogout');
 
 // 第三方登录
-Route::get('auth/github', 'Auth\AuthController@github');
-Route::get('auth/weibo', 'Auth\AuthController@weibo');
-Route::get('auth/weibo/callback', 'Auth\AuthController@callback');
-Route::get('auth/qq', 'Auth\AuthController@qq');
-
 Route::get('oauth/{provider}', array(
     'as' => 'oauth', 'uses' => 'Auth\AuthController@oauth'
 ));
@@ -33,9 +36,6 @@ Route::get('oauth/{provider}/callback', array(
 Route::get('auth/bind', 'Auth\AuthController@getBind');
 Route::post('auth/bind', 'Auth\AuthController@postBind');
 
-// 注册
-Route::get('auth/register', 'Auth\AuthController@getRegister');
-Route::post('auth/register', 'Auth\AuthController@postRegister');
 
 // 发送密码重置邮件
 Route::get('password/email', 'Auth\PasswordController@getEmail');

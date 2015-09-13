@@ -17,12 +17,12 @@
                 <li class="{{ (\Request::is('about') ? ' active ' : '') }}"><a href="{{ url('/about') }}">关于</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                @if(!\Request::hasCookie('job_num'))
+                @if(!Sentinel::check())
                     <li class="{{ (\Request::is('login') ? ' active ' : '') }}"><a href="{{ url('auth/login') }}">登录</a>
                     </li>
                 @else
                     <form class="navbar-form navbar-left" method="POST" action="{{ url('auth/logout') }}">
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        {{csrf_field()}}
                         <input type="submit" class="btn btn-default" value="退出"/>
                     </form>
                 @endif

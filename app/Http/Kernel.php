@@ -26,8 +26,10 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth' => \Imojie\Http\Middleware\Authenticate::class,
-        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'guest' => \Imojie\Http\Middleware\RedirectIfAuthenticated::class,
+//        'auth' => \Imojie\Http\Middleware\Authenticate::class,
+//        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+//        'guest' => \Imojie\Http\Middleware\RedirectIfAuthenticated::class,
+        'auth' => \Imojie\Http\Middleware\Auth::class,
+        'guest' => \Imojie\Http\Middleware\Guest::class,
     ];
 }
