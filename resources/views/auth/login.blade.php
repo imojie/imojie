@@ -8,9 +8,9 @@
         <div class="row" id="passport-wrap">
             <div class="col-md-3">
                 <ul class="nav nav-pills nav-stacked">
-                    <li role="presentation" class="active"><a href="">登录</a></li>
+                    <li role="presentation" class="active"><a href="{{url('auth/login')}}">登录</a></li>
                     <li role="presentation"><a href="{{url('auth/register')}}">注册</a></li>
-                    <li role="presentation"><a href="#">找回密码</a></li>
+                    <li role="presentation"><a href="{{url('auth/forgot')}}">找回密码</a></li>
                 </ul>
             </div>
             <div class="col-md-9">

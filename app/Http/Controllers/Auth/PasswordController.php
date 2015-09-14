@@ -4,6 +4,7 @@ namespace Imojie\Http\Controllers\Auth;
 
 use Imojie\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 
 class PasswordController extends Controller
 {
@@ -20,6 +21,8 @@ class PasswordController extends Controller
 
     use ResetsPasswords;
 
+    protected $subject = '重置密码';
+
     /**
      * Create a new password controller instance.
      *
@@ -28,5 +31,19 @@ class PasswordController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+    }
+
+
+    public function getEmail()
+    {
+        return view('auth.forgot');
+    }
+
+
+    protected function resetPassword($user, $password)
+    {
+        $user = Sentinel::findById($user->id);
+        $user = Sentinel::update($user, ['password' => $password]);
+        Sentinel::login($user);
     }
 }

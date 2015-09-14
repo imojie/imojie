@@ -28,7 +28,7 @@ return [
     |
     */
 
-    'model' => Imojie\User::class,
+    'model' => Imojie\Models\User::class,
 
     /*
     |--------------------------------------------------------------------------

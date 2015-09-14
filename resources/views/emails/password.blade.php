@@ -1,1 +1,1 @@
-點擊此處重置你的密碼：{{ url('password/reset/'.$token) }}
+在浏览器中打开链接，重置你的密码：{{ url('auth/reset/'.$token) }}
