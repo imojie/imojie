@@ -45,7 +45,7 @@
                     </form>
                 </div>
                 <div class="tab-pane" id="register" role="tabpanel">
-                    <form method="POST" action="{{action('Auth\AuthController@postLogin')}}">
+                    <form method="POST" action="{{action('Auth\AuthController@postRegister')}}">
                         {!! csrf_field() !!}
                         <div class="form-group mt10">
                             <label for="email">邮箱</label>

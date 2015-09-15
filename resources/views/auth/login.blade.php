@@ -26,13 +26,12 @@
                     {!! csrf_field() !!}
                     <div class="form-group">
                         <label for="email">邮箱</label>
-                        <input type="email" class="form-control" id="email" placeholder="Email" name="email"
+                        <input type="email" class="form-control" id="email" name="email"
                                value="{{ old('email') }}">
                     </div>
                     <div class="form-group">
                         <label for="password">密码</label>
-                        <input type="password" class="form-control" id="password" placeholder="Password"
-                               name="password">
+                        <input type="password" class="form-control" id="password" name="password">
                     </div>
                     <div class="form-group">
                         <label>

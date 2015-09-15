@@ -8,6 +8,9 @@
     <div class="container">
         <div id="bind-wrap">
             <div>
+                @if(isset($oauthUser))
+                    {{$oauthUser['user']->getId()}}
+                @endif
                 <form method="POST" action="{{action('Auth\AuthController@postActivation')}}">
                     @foreach ($errors->all() as $error)
                         <div class="alert alert-warning alert-dismissible" role="alert">

@@ -120,10 +120,14 @@ class AuthController extends Controller
         if (!$request->has('email') || !$request->has('code')) {
             abort(404);
         }
-        return view('auth.activation', [
+        $vars = [
             'email' => $request->input('email'),
             'code' => $request->input('code'),
-        ]);
+        ];
+        if (Session::has(self::OAUTH_USER)) {
+            $vars['oauthUser'] = Session::get(self::OAUTH_USER);
+        }
+        return view('auth.activation', $vars);
     }
 
 
@@ -142,6 +146,25 @@ class AuthController extends Controller
         $status = Activation::complete($user, $request->input('code'));
         if (!$status) {
             return redirect('auth/register')->withErrors(array('邮件链接过期，请重新注册'));
+        }
+
+        if (Session::has(self::OAUTH_USER)) {
+            $oauthInfo = Session::get(self::OAUTH_USER);
+            $provider = $oauthInfo['provider'];
+            $oauthUser = $oauthInfo['user'];
+
+            $uid = OAuthAccount::where('oauth_id', $oauthUser->getId())
+                ->where('oauth_type', $provider)->pluck('uid');
+
+            if (!$uid) {
+                // 绑定账号
+                $oAuthAccount = new OAuthAccount();
+                $oAuthAccount->uid = $user->id;
+                $oAuthAccount->oauth_id = $oauthUser->getId();
+                $oAuthAccount->oauth_type = $provider;
+                $oAuthAccount->created_at = time();
+                $oAuthAccount->save();
+            }
         }
 
         // 登录
