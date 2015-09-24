@@ -20,9 +20,10 @@ class UserController extends Controller
 
     public function index($username)
     {
-        $user = User::where('name', $username)->first();
-        dd(\DB::getQueryLog());
-        return $user->name;
+        $user = User::where('first_name', $username)->first();
+        var_dump(\DB::getQueryLog());
+        var_dump($user);
+        return $user->first_name;
     }
 
 
@@ -35,7 +36,7 @@ class UserController extends Controller
 
     public function edit()
     {
-        $user = \Auth::user();
+        $user = Sentinel::getUser();
         return view('user.edit', compact('user'));
     }
 
@@ -62,7 +63,7 @@ class UserController extends Controller
 
     public function getPassword()
     {
-
+        return view('user.password');
     }
 
     public function postPassword()
@@ -73,7 +74,8 @@ class UserController extends Controller
 
     public function getEmail()
     {
-
+        $user = Sentinel::getUser();
+        return view('user.email', compact('user'));
     }
 
     public function postEmail()
@@ -81,7 +83,12 @@ class UserController extends Controller
 
     }
 
-    public function oauth()
+    public function getOauth()
+    {
+        return view('user.oauth');
+    }
+
+    public function postOauth()
     {
 
     }

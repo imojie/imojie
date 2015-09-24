@@ -40,5 +40,13 @@ Route::post('auth/reset', 'Auth\PasswordController@postReset');
 // 用户主页
 Route::get('/home', 'UserController@home');
 Route::get('/u/{username}', 'UserController@index');
-Route::get('user/edit', 'UserController@edit');
-Route::post('user/update', 'UserController@update');
+
+// 用户设置
+Route::get('user/settings/info', 'UserController@edit');
+Route::post('user/settings/info', 'UserController@update');
+Route::get('user/settings/email', 'UserController@getEmail');
+Route::post('user/settings/email', 'UserController@postEmail');
+Route::get('user/settings/password', 'UserController@getPassword');
+Route::post('user/settings/password', 'UserController@postPassword');
+Route::get('user/settings/oauth', 'UserController@getOauth');
+Route::post('user/settings/oauth', 'UserController@postOauth');
