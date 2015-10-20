@@ -37,6 +37,7 @@ Route::post('auth/forgot', 'Auth\PasswordController@postEmail');
 Route::get('auth/reset/{token}', 'Auth\PasswordController@getReset');
 Route::post('auth/reset', 'Auth\PasswordController@postReset');
 
+
 // 用户主页
 Route::get('/home', 'UserController@home');
 Route::get('/u/{username}', 'UserController@index');

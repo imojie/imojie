@@ -79,19 +79,24 @@ class AuthController extends Controller
     public function postRegister(Request $request)
     {
         $this->validate($request, [
-            'email' => 'required|email|unique:users',
-        ], [
-            'email.unique' => '该邮箱已经被注册激活',
+            'email' => 'required|email',
         ]);
 
         $email = $request->input('email');
 
-        // 注册用户，但是先不激活
-        $credentials = [
-            'email' => $email,
-            'password' => md5(time()),
-        ];
-        $user = Sentinel::register($credentials, false);
+        $user = Sentinel::findByCredentials(['email' => $email]);
+        if (!$user) {
+            // 注册用户，但是先不激活
+            $credentials = [
+                'email' => $email,
+                'password' => md5(time()),
+            ];
+            $user = Sentinel::register($credentials, false);
+        }
+
+        if (Activation::completed($user)) {
+            return redirect('auth/register')->withErrors(array('该邮箱已经被注册激活'));
+        }
 
         // 生成激活码
         $activation = Activation::create($user);
