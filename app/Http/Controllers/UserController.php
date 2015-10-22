@@ -66,9 +66,33 @@ class UserController extends Controller
         return view('user.password');
     }
 
-    public function postPassword()
-    {
 
+    public function postPassword(Request $request)
+    {
+        $this->validate($request, [
+            'current_password' => 'required',
+            'new_password' => 'required|confirmed',
+        ], [
+            'current_password.required' => '当前密码不能为空',
+            'new_password.required' => '新密码不能为空',
+            'new_password.confirmed' => '新密码和重复新密码必须一致',
+        ]);
+
+        // 验证当前密码
+        $credentials = [
+            'email' => Sentinel::getUser()->email,
+            'password' => $request->get('current_password'),
+        ];
+
+        $user = Sentinel::authenticate($credentials);
+        if (!$user) {
+            return redirect()->back()->withErrors(['current_password' => '当前密码错误']);
+        }
+
+        // 修改新密码
+        Sentinel::update($user, ['password' => $request->get('new_password')]);
+
+        return redirect()->back()->with('message', '修改成功');
     }
 
 

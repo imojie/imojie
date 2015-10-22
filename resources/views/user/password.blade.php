@@ -12,7 +12,15 @@
             <div class="col-md-10">
                 <div class="row">
                     <div class="col-md-9">
-                        <form method="POST" action="{{action('UserController@update')}}">
+                        <form method="POST" action="{{action('UserController@postPassword')}}">
+                            @if (Session::has('message'))
+                                <div class="alert alert-success alert-dismissible" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <p>{{Session::get('message')}}</p>
+                                </div>
+                            @endif
                             @foreach ($errors->all() as $error)
                                 <div class="alert alert-warning alert-dismissible" role="alert">
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">

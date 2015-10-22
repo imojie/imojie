@@ -22,6 +22,9 @@
                                 href="{{ url('auth/login') }}">登录/注册</a>
                     </li>
                 @else
+                    <li class="{{ (\Request::is('user/settings/*') ? ' active ' : '') }}"><a
+                                href="{{ url('user/settings/email') }}">{{\Sentinel::getUser()->first_name}}</a>
+                    </li>
                     <form class="navbar-form navbar-left" method="POST" action="{{ url('auth/logout') }}">
                         {{csrf_field()}}
                         <input type="submit" class="btn btn-default" value="退出"/>
