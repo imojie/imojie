@@ -23,7 +23,7 @@
                     </li>
                 @else
                     <li class="{{ (\Request::is('user/settings/*') ? ' active ' : '') }}"><a
-                                href="{{ url('user/settings/email') }}">{{\Sentinel::getUser()->first_name}}</a>
+                                href="{{ url('user/settings/info') }}">{{\Sentinel::getUser()->first_name}}</a>
                     </li>
                     <form class="navbar-form navbar-left" method="POST" action="{{ url('auth/logout') }}">
                         {{csrf_field()}}

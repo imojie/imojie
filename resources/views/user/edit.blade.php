@@ -33,6 +33,11 @@
                                        value="{{ $user->first_name }}">
                             </div>
                             <div class="form-group">
+                                <label for="username">手机号</label>
+                                <input type="text" class="form-control" id="phone_number" name="phone_number"
+                                       value="{{ $user->phone_number }}">
+                            </div>
+                            <div class="form-group">
                                 <label>性别</label>
 
                                 <div>
@@ -51,8 +56,9 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="city">城市</label>
-                                <input id="city" class="form-control" type="text" name="city" value="">
+                                <label for="username">生日</label>
+                                <input type="text" class="form-control" id="birthday" name="birthday"
+                                       value="{{ date('Y-m-d', $user->birthday) }}">
                             </div>
                             <div class="form-group">
                                 <button type="submit" class="btn btn-success btn-block">提 交</button>

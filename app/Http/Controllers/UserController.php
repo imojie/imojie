@@ -5,6 +5,8 @@ namespace Imojie\Http\Controllers;
 use Illuminate\Http\Request;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Imojie\Models\User;
+use Imojie\Models\Zodiac;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -43,17 +45,23 @@ class UserController extends Controller
 
     public function update(Request $request)
     {
+        $user = Sentinel::getUser();
+
         $this->validate($request, array(
-            'name' => 'required',
+            'username' => 'required|unique:users,first_name,' . $user->id,
+            'phone_number' => 'integer',
             'gender' => 'required|in:0,1,2',
-            'city' => '',
+            'birthday' => 'date',
         ));
 
-        $user = \Auth::user();
+        $zodiac = new Zodiac(new Carbon($request->get('birthday')));
 
-        $user->name = $request->get('name');
+        $user->first_name = $request->get('username');
+        $user->phone_number = $request->get('phone_number');
         $user->gender = $request->get('gender');
-        $user->city = $request->get('city');
+        $user->birthday = strtotime($request->get('birthday'));
+        $user->zodiac = $zodiac->getZodiacCode($zodiac->getZodiac());
+        $user->constellation = $zodiac->getConstellationCode($zodiac->getConstellation());
 
         $user->save();
 

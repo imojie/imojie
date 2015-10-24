@@ -93,6 +93,11 @@ return [
         ],
         'username' => [
             'required' => '用户名不能为空',
+            'unique' => '用户名已被占用',
+        ],
+        'gender' => [
+            'required' => '性别不能为空',
+            'in' => '性别填写错误',
         ],
         'password' => [
             'required' => '密码不能为空',

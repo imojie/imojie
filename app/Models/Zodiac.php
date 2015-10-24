@@ -39,6 +39,23 @@ class Zodiac
         '摩羯座' => [12.22, 1.19],
     ];
 
+
+    protected $constellationsMap = [
+        1 => '水瓶座',
+        2 => '双鱼座',
+        3 => '白羊座',
+        4 => '金牛座',
+        5 => '双子座',
+        6 => '巨蟹座',
+        7 => '狮子座',
+        8 => '处女座',
+        9 => '天秤座',
+        10 => '天蝎座',
+        11 => '射手座',
+        12 => '摩羯座',
+    ];
+
+
     public function __construct(Carbon $carbon)
     {
         $this->carbon = $carbon;
@@ -52,6 +69,13 @@ class Zodiac
     {
         $year = $this->carbon->year;
         return $this->zodiac[($year - 4) % 12 + 1];
+    }
+
+
+    public function getZodiacCode($zodiac)
+    {
+        $code = array_search($zodiac, $this->zodiac);
+        return $code ? $code : 0;
     }
 
 
@@ -73,6 +97,13 @@ class Zodiac
         }
 
         return '摩羯座';
+    }
+
+
+    public function getConstellationCode($constellation)
+    {
+        $code = array_search($constellation, $this->constellationsMap);
+        return $code ? $code : 0;
     }
 
 
